@@ -66,3 +66,90 @@ class Maze {
 
 	}
 }
+
+class Node {
+	constructor(){
+	}
+}
+
+/*
+	Undirected unweighted graph class
+*/
+class Graph {
+	constructor(nodes, edges){
+		this.nodes = nodes || new Set();
+		this.edges = edges || new Map();
+	}
+
+	addNode(node){
+		this.nodes.push(node);
+		this.edges.set(node, new Set());
+	}
+
+	removeNode(node){
+		this.nodes.delete(node);
+		this.edges.delete(node);
+	}
+
+	connectNodes(a, b){
+		this.setEdge(a, b);
+		this.setEdge(b, a);
+	}
+
+	hasNode(node){
+		return this.nodes.has(node);
+	}
+
+	connectedNodes(node){
+		return this.edges.get(node);
+	}
+
+	setEdge(a, b){
+		this.getEdges(a).add(b);
+	}
+}
+
+/*
+	How to use:
+	
+	// [variables] = graph, nodeA, nodeB
+	const closestPath = AStarAlg.algorithm(graph, (a, b) => (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y))
+	
+	console.log(closestPath(nodeA, nodeB)); -> [a, node, ..., node, b]
+*/
+class AStarAlg {
+
+	static algorithm(graph, heuristic){
+		return (a, b) => {
+			const closedSet = new Set();
+			const openSet = new Set();
+			const priorityQueue = new PriorityQueue();
+
+			let current = a;
+
+			while (!openSet.isEmpty()){
+				current = priorityQueue.deque();
+
+				if (current === b){
+					AStarAlg.reconstructPath();
+				}
+
+				else {
+					graph.connectedNodes(current).forEach(node => {
+						if (closedSet.has(node)){
+							return;
+						}
+
+						if (!openSet.has(node)){
+							openSet.add(node);
+						}
+					});
+				}
+			}
+		}
+	}
+
+	static reconstructPath(){
+
+	}
+}
