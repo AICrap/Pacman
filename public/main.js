@@ -12,10 +12,14 @@ const height = canvas.height
 //---TESTING!!!!!----
 const graph = new Graph();
 const maze = new Array(10).fill().map(x => new Array(10));
+const offsetX = 50;
+const offSetY = 50;
+const tileSize = 50;
+const gridSize = 10;
 
-for (let i = 0; i < 10; i++){
-    for (let j = 0; j < 10; j++){
-        const point = new Point(50 + 50 * i, 50 + 50 * j);
+for (let i = 0; i < gridSize; i++){
+    for (let j = 0; j < gridSize; j++){
+        const point = new Point(offsetX + tileSize * i, offSetY + tileSize * j);
         graph.addNode(point);
         point.draw(ctx);
 
@@ -23,15 +27,16 @@ for (let i = 0; i < 10; i++){
     }
 }
 
-const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+const directions = [[-1, 0], [1, 0], [0, -1], [0, 1],
+                    [-1, 1], [1, -1], [1, 1], [-1, -1]];
 
-for (let i = 0; i < 10; i++){
-    for (let j = 0; j < 10; j++){
+for (let i = 0; i < gridSize; i++){
+    for (let j = 0; j < gridSize; j++){
         const point = maze[i][j];
 
         for (let [dx, dy] of directions){
-            if (i + dx >= 0 && i + dx < 10){
-                if (j + dy >= 0 && j + dy < 10){
+            if (i + dx >= 0 && i + dx < gridSize){
+                if (j + dy >= 0 && j + dy < gridSize){
                     graph.connect(point, maze[i + dx][j + dy]);
                 }
             }
@@ -40,41 +45,19 @@ for (let i = 0; i < 10; i++){
 }
 
 //Obstacles!
-for (let i = 0; i < 9; i++){
-    for (let j = 3; j < 6; j++){
-        const point = maze[i][j];
-        graph.removeNode(point);
-    }
+for (let i = 0; i < 30; i++){
+    const x = Math.floor(Math.random() * gridSize);
+    const y = Math.floor(Math.random() * gridSize);
+
+    const point = maze[x][y];
+    graph.removeNode(point);
+
+    ctx.beginPath();
+    ctx.rect(offsetX + x * tileSize - tileSize / 2,
+            offsetX + y * tileSize - tileSize / 2, tileSize, tileSize);
+    ctx.fill();
+    ctx.stroke();
 }
-
-ctx.beginPath();
-ctx.rect(50, 200, 400, 100);
-ctx.fill();
-ctx.stroke();
-
-for (let i = 7; i < 10; i++){
-    for (let j = 7; j < 9; j++){
-        const point = maze[i][j];
-        graph.removeNode(point);
-    }
-}
-
-ctx.beginPath();
-ctx.rect(400, 400, 100, 50);
-ctx.fill();
-ctx.stroke();
-
-for (let i = 8; i < 10; i++){
-    for (let j = 0; j < 2; j++){
-        const point = maze[i][j];
-        graph.removeNode(point);
-    }
-}
-
-ctx.beginPath();
-ctx.rect(450, 50, 50, 50);
-ctx.fill();
-ctx.stroke();
 
 const start = maze[0][0];
 const end = maze[9][9];
