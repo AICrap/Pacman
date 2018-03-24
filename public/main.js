@@ -45,7 +45,7 @@ for (let i = 0; i < gridSize; i++){
 }
 
 //Obstacles!
-for (let i = 0; i < 1000; i++){
+for (let i = 0; i < 300; i++){
     const x = Math.floor(Math.random() * gridSize);
     const y = Math.floor(Math.random() * gridSize);
 
