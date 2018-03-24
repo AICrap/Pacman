@@ -1,155 +1,128 @@
+import {Astar} from './astar.js';
+import {Graph} from './graph.js';
+import {Point} from './point.js'
+
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
 const width = canvas.width
 const height = canvas.height
 
-/*
 
-2 X 1 MODEL
 
-XXXXXXXXXXXXXXXXX
-X---------------X
-X-OOO-OOOOO-OOO-X
-----O-------O----
-XOO-O-OOOOO-O-OOX
-X-----O---O-----X
-X-OOO-OOOOO-OOO-X
-X-O-----------O-X
-X-O-O-OOOOO-O-O-X
-X---O-------O---X
-XXXXXXXXXXXXXXXXX
+//---TESTING!!!!!----
+const graph = new Graph();
+const maze = new Array(10).fill().map(x => new Array(10));
 
-2 X 1 MAZE
+for (let i = 0; i < 10; i++){
+    for (let j = 0; j < 10; j++){
+        const point = new Point(50 + 50 * i, 50 + 50 * j);
+        graph.addNode(point);
+        point.draw(ctx);
 
-XXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXX
-XX----------------------XX
-XX-OOOOO-OOOOOOOO-OOOOO-XX
-XX-OOOOO-OOOOOOOO-OOOOO-XX
-------OO----------OO------
-XXOOO-OO-OOOOOOOO-OO-OOOXX
-XXOOO-OO-OOOOOOOO-OO-OOOXX
-XX-------OO----OO-------XX
-XX-OOOOO-OOOOOOOO-OOOOO-XX
-XX-OOOOO-OOOOOOOO-OOOOO-XX
-XX-OO----------------OO-XX
-XX-OO-OO-OOOOOOOO-OO-OO-XX
-XX-OO-OO-OOOOOOOO-OO-OO-XX
-XX----OO----------OO----XX
-XXXXXXXXXXXXXXXXXXXXXXXXXX
-XXXXXXXXXXXXXXXXXXXXXXXXXX
-
-*/
-
-let MazeTiles = {
-	WALL: 'X',
-	BLOCK: 'O',
-	PATH: '-'
+        maze[i][j] = point;
+    }
 }
 
-class Maze {
-	constructor(model) {
-		// Create a maze based on the minimized model
-	}
+for (let i = 0; i < 10; i++){
+    for (let j = 0; j < 10; j++){
+        const point = maze[i][j];
 
-	static generateModel(width, height, numTunnels, maxBlockSize) {
-		if (numTunnels > 2 * height + 3) {
-			throw 'Tries to generate a maze with too many tunnels.'
-		}
-
-		let model = array2d(9 + 4 * width, 7 + 4 * height)
-
-		// Continue building the model
-	}
-
-	print() {
-
-	}
+        for (let dx = -1; dx <= 1; dx++){
+            for (let dy = -1; dy <= 1; dy++){
+                if (dx == 0 || dy == 0 && !(dx == 0 && dy == 0)){
+                    if (i + dx >= 0 && i + dx < 10){
+                        if (j + dy >= 0 && j + dy < 10){
+                            graph.connect(point, maze[i + dx][j + dy]);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
-class Node {
-	constructor(){
-	}
+//Obstacles!
+for (let i = 0; i < 9; i++){
+    for (let j = 3; j < 6; j++){
+        const point = maze[i][j];
+        graph.removeNode(point);
+    }
 }
 
-/*
-	Undirected unweighted graph class
-*/
-class Graph {
-	constructor(nodes, edges){
-		this.nodes = nodes || new Set();
-		this.edges = edges || new Map();
-	}
+ctx.beginPath();
+ctx.rect(50, 200, 400, 100);
+ctx.fill();
+ctx.stroke();
 
-	addNode(node){
-		this.nodes.push(node);
-		this.edges.set(node, new Set());
-	}
-
-	removeNode(node){
-		this.nodes.delete(node);
-		this.edges.delete(node);
-	}
-
-	connectNodes(a, b){
-		this.setEdge(a, b);
-		this.setEdge(b, a);
-	}
-
-	hasNode(node){
-		return this.nodes.has(node);
-	}
-
-	connectedNodes(node){
-		return this.edges.get(node);
-	}
-
-	setEdge(a, b){
-		this.getEdges(a).add(b);
-	}
+for (let i = 7; i < 10; i++){
+    for (let j = 7; j < 9; j++){
+        const point = maze[i][j];
+        graph.removeNode(point);
+    }
 }
 
-/*
-	How to use:
-	
-	// [variables] = graph, nodeA, nodeB
-	const closestPath = AStarAlg.algorithm(graph, (a, b) => (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y))
-	
-	console.log(closestPath(nodeA, nodeB)); -> [a, node, ..., node, b]
-*/
-class AStarAlg {
+ctx.beginPath();
+ctx.rect(400, 400, 100, 50);
+ctx.fill();
+ctx.stroke();
 
-	static algorithm(graph, heuristic){
-		return (a, b) => {
-			const closedSet = new Set();
-			const openSet = new Set();
-			const priorityQueue = new PriorityQueue();
+for (let i = 8; i < 10; i++){
+    for (let j = 0; j < 2; j++){
+        const point = maze[i][j];
+        graph.removeNode(point);
+    }
+}
 
-			let current = a;
+ctx.beginPath();
+ctx.rect(450, 50, 50, 50);
+ctx.fill();
+ctx.stroke();
 
-			while (!openSet.isEmpty()){
-				current = priorityQueue.deque();
+const start = maze[0][0];
+const end = maze[9][9];
 
-				if (current === b){
-					AStarAlg.reconstructPath();
-				}
+const euclideanDistance = (a, b) => (a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y);
+const taxicabDistance = (a, b) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+const discreteDistance = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
+const binaryDistance = (a, b) => (a.x === b.x && a.y === b.y) ? 0 : 1;
 
-				else {
-					graph.connectedNodes(current).forEach(node => {
-						if (closedSet.has(node)){
-							return;
-						}
+const algEuclid = Astar.algorithm(euclideanDistance);
+const algTaxicab = Astar.algorithm(taxicabDistance);
+const algDiscrete = Astar.algorithm(discreteDistance);
+const algBinary = Astar.algorithm(binaryDistance);
 
-						if (!openSet.has(node)){
-							openSet.add(node);
-						}
-					});
-				}
-			}
-		}
-	}
+const bestPathEuclid = algEuclid(graph, start, end);
+const bestPathTaxicab = algTaxicab(graph, start, end);
+const bestPathDiscrete = algDiscrete(graph, start, end);
+const bestPathBinary = algDiscrete(graph, start, end);
 
-	static reconstructPath(){
+console.log(bestPathEuclid);
+console.log(bestPathTaxicab);
+console.log(bestPathDiscrete);
+console.log(bestPathBinary);
 
-	}
+ctx.strokeStyle = "red";
+drawPath(bestPathEuclid);
+
+ctx.strokeStyle = "blue";
+drawPath(bestPathTaxicab);
+
+ctx.strokeStyle = "yellow";
+drawPath(bestPathDiscrete);
+
+ctx.strokeStyle = "green";
+drawPath(bestPathBinary);
+
+//Drawing!!!
+function drawPath(path){
+    for (let i = 0; i < path.length - 1; i++){
+        line(path[i].x, path[i].y, path[i+1].x, path[i+1].y);
+    }
+}
+
+function line(x1, y1, x2, y2){
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
 }
