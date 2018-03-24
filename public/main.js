@@ -62,7 +62,7 @@ for (let i = 0; i < 100; i++){
 const start = maze[0][0];
 const end = maze[gridSize - 1][gridSize - 1];
 
-const euclideanDistance = (a, b) => (a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y);
+const euclideanDistance = (a, b) => Math.sqrt((a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y));
 const taxicabDistance = (a, b) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
 const discreteDistance = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
 const binaryDistance = (a, b) => (a.x === b.x && a.y === b.y) ? 0 : 1;
