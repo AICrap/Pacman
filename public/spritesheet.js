@@ -7,14 +7,21 @@ export class SpriteSheeet {
     }
 
     define(name, x, y, width, height){
-        //What to do?
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        const context = canvas.getContext('2d');
+
+        context.drawImage(
+            this.image, x, y, width, height, 0, 0, width, height
+        );
+
+        return canvas;
     }
 
     draw(name, context, x, y){
-        context.draw(this.tiles.get(name));
+        context.draw(this.tiles.get(name), x, y);
     }
-
-    drawTile(name, context, x, y){
-        this.draw(name, context, x * this.width, y * this.height);
-    }
+    
 }
