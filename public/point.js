@@ -1,8 +1,5 @@
-import {Node} from './node.js';
-
-export class Point extends Node {
+export class Point {
     constructor(x, y){
-        super();
         this.x = x;
         this.y = y;
     }
