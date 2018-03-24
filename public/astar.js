@@ -2,9 +2,9 @@
 	How to use:
 
 	// [variables] = graph, nodeA, nodeB
-	const closestPath = AStar.algorithm(graph, (a, b) => (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y))
+	const closestPath = AStar.algorithm((a, b) => (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y))
 
-	console.log(closestPath(nodeA, nodeB)); -> [a, node, ..., node, b]
+	console.log(closestPath(graph, nodeA, nodeB)); -> [a, node, ..., node, b]
 */
 export class Astar {
 
