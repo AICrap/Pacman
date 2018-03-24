@@ -4,11 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-<<<<<<< HEAD
 	"start": "serve ./public/",
-=======
-    "start": "serve ./public",
->>>>>>> 0b66963d768f2a5e15f110ca3a0d6d13dcfad49e
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
