@@ -14,7 +14,7 @@ const graph = new Graph();
 const offsetX = 50;
 const offSetY = 50;
 const tileSize = 10;
-const gridSize = 40;
+const gridSize = 50;
 const maze = new Array(gridSize).fill().map(x => new Array(gridSize));
 
 for (let i = 0; i < gridSize; i++){
@@ -45,7 +45,7 @@ for (let i = 0; i < gridSize; i++){
 }
 
 //Obstacles!
-for (let i = 0; i < 300; i++){
+for (let i = 0; i < 800; i++){
     const x = Math.floor(Math.random() * gridSize);
     const y = Math.floor(Math.random() * gridSize);
 
@@ -54,7 +54,7 @@ for (let i = 0; i < 300; i++){
 
     ctx.beginPath();
     ctx.rect(offsetX + x * tileSize - tileSize / 2,
-            offsetX + y * tileSize - tileSize / 2, tileSize, tileSize);
+            offsetX + y * tileSize - tileSize / 2, 3*tileSize/4, 3*tileSize/4);
     ctx.fill();
     ctx.stroke();
 }
