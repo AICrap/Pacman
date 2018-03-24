@@ -13,8 +13,8 @@ const height = canvas.height
 const graph = new Graph();
 const offsetX = 50;
 const offSetY = 50;
-const tileSize = 20;
-const gridSize = 20;
+const tileSize = 10;
+const gridSize = 40;
 const maze = new Array(gridSize).fill().map(x => new Array(gridSize));
 
 for (let i = 0; i < gridSize; i++){
@@ -45,7 +45,7 @@ for (let i = 0; i < gridSize; i++){
 }
 
 //Obstacles!
-for (let i = 0; i < 100; i++){
+for (let i = 0; i < 1000; i++){
     const x = Math.floor(Math.random() * gridSize);
     const y = Math.floor(Math.random() * gridSize);
 
@@ -64,22 +64,33 @@ const end = maze[gridSize - 1][gridSize - 1];
 
 const euclideanDistance = (a, b) => Math.sqrt((a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y));
 const taxicabDistance = (a, b) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
-const discreteDistance = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
+const maxDistance = (a, b) => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
 const binaryDistance = (a, b) => (a.x === b.x && a.y === b.y) ? 0 : 1;
 
 const algEuclid = Astar.algorithm(euclideanDistance);
 const algTaxicab = Astar.algorithm(taxicabDistance);
-const algDiscrete = Astar.algorithm(discreteDistance);
+const algMax = Astar.algorithm(maxDistance);
 const algBinary = Astar.algorithm(binaryDistance);
 
+console.time('Time for euclidean');
 const bestPathEuclid = algEuclid(graph, start, end);
+console.timeEnd('Time for euclidean')
+
+console.time('Time for taxi cab');
 const bestPathTaxicab = algTaxicab(graph, start, end);
-const bestPathDiscrete = algDiscrete(graph, start, end);
+console.timeEnd('Time for taxi cab')
+
+console.time('Time for max')
+const bestPathMax = algMax(graph, start, end);
+console.timeEnd('Time for max')
+
+console.time('Time for binary')
 const bestPathBinary = algBinary(graph, start, end);
+console.timeEnd('Time for binary')
 
 console.log(bestPathEuclid);
 console.log(bestPathTaxicab);
-console.log(bestPathDiscrete);
+console.log(bestPathMax);
 console.log(bestPathBinary);
 
 ctx.strokeStyle = "red";
@@ -89,7 +100,7 @@ ctx.strokeStyle = "blue";
 drawPath(bestPathTaxicab);
 
 ctx.strokeStyle = "yellow";
-drawPath(bestPathDiscrete);
+drawPath(bestPathMax);
 
 ctx.strokeStyle = "green";
 drawPath(bestPathBinary);

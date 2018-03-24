@@ -9,7 +9,7 @@ export class Point extends Node {
 
     draw(context){
         context.beginPath();
-        context.arc(this.x, this.y, 5, 0, 2 * Math.PI);
+        context.arc(this.x, this.y, 2, 0, 2 * Math.PI);
         context.stroke();
     }
 
