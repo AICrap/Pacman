@@ -94,7 +94,7 @@ const algBinary = Astar.algorithm(binaryDistance);
 const bestPathEuclid = algEuclid(graph, start, end);
 const bestPathTaxicab = algTaxicab(graph, start, end);
 const bestPathDiscrete = algDiscrete(graph, start, end);
-const bestPathBinary = algDiscrete(graph, start, end);
+const bestPathBinary = algBinary(graph, start, end);
 
 console.log(bestPathEuclid);
 console.log(bestPathTaxicab);
