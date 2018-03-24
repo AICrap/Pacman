@@ -11,11 +11,11 @@ const height = canvas.height
 
 //---TESTING!!!!!----
 const graph = new Graph();
-const maze = new Array(10).fill().map(x => new Array(10));
 const offsetX = 50;
 const offSetY = 50;
-const tileSize = 50;
-const gridSize = 10;
+const tileSize = 20;
+const gridSize = 20;
+const maze = new Array(gridSize).fill().map(x => new Array(gridSize));
 
 for (let i = 0; i < gridSize; i++){
     for (let j = 0; j < gridSize; j++){
@@ -45,7 +45,7 @@ for (let i = 0; i < gridSize; i++){
 }
 
 //Obstacles!
-for (let i = 0; i < 30; i++){
+for (let i = 0; i < 100; i++){
     const x = Math.floor(Math.random() * gridSize);
     const y = Math.floor(Math.random() * gridSize);
 
@@ -60,7 +60,7 @@ for (let i = 0; i < 30; i++){
 }
 
 const start = maze[0][0];
-const end = maze[9][9];
+const end = maze[gridSize - 1][gridSize - 1];
 
 const euclideanDistance = (a, b) => (a.x-b.x)*(a.x-b.x) + (a.y-b.y)*(a.y-b.y);
 const taxicabDistance = (a, b) => Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
