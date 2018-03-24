@@ -16,6 +16,7 @@ export class Astar {
             const fMap = new Map();
             const gMap = new Map();
             const hMap = new Map();
+            const cameFrom = new Map();
 
             let current = start;
 
@@ -24,7 +25,7 @@ export class Astar {
             gMap.set(current, 0); //No moves
             hMap.set(current, heuristic(current, end));
             fMap.set(current, heuristic(current, end));
-
+            cameFrom.set(current, undefined);
 
             // While there are still options left
             while (openSet.length > 0) {
@@ -35,7 +36,7 @@ export class Astar {
 
                 // We've reached our end goal!
                 if (heuristic(current, end) <= 0) {
-                    return Astar.reconstructPath(current);
+                    return Astar.reconstructPath(current, cameFrom);
                 } else {
                     // Best option moves from openSet to closedSet
                     const currentIndex = openSet.indexOf(current);
@@ -66,7 +67,7 @@ export class Astar {
                         if (newPath){
                             hMap.set(neighbor, heuristic(neighbor, end));
                             fMap.set(neighbor, gMap.get(neighbor) + hMap.get(neighbor));
-                            neighbor.previous = current;
+                            cameFrom.set(neighbor, current);
                         }
                     });
                 }
@@ -80,14 +81,14 @@ export class Astar {
     /*
         Returns the path from the start to the node
     */
-    static reconstructPath(node) {
+    static reconstructPath(node, cameFrom) {
         const path = [];
         let temp = node;
         path.push(temp);
 
-        while (temp.previous){
-            path.push(temp.previous);
-            temp = temp.previous;
+        while (cameFrom.get(temp)){
+            path.push(cameFrom.get(temp));
+            temp = cameFrom.get(temp);
         }
 
         return path.reverse();
