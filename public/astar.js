@@ -48,7 +48,7 @@ export class Astar {
                         // Have we been here already
                         let newPath = false;
                         if (!closedSet.includes(neighbor)){
-                            const tempG = gMap.get(current) + heuristic(current, neighbor)
+                            const tempG = gMap.get(current) + heuristic(current, neighbor);
                             // Better path?
                             if (openSet.includes(neighbor)) {
                                 // Improvement on the path
