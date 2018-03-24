@@ -23,18 +23,16 @@ for (let i = 0; i < 10; i++){
     }
 }
 
+const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+
 for (let i = 0; i < 10; i++){
     for (let j = 0; j < 10; j++){
         const point = maze[i][j];
 
-        for (let dx = -1; dx <= 1; dx++){
-            for (let dy = -1; dy <= 1; dy++){
-                if (dx == 0 || dy == 0 && !(dx == 0 && dy == 0)){
-                    if (i + dx >= 0 && i + dx < 10){
-                        if (j + dy >= 0 && j + dy < 10){
-                            graph.connect(point, maze[i + dx][j + dy]);
-                        }
-                    }
+        for (let [dx, dy] of directions){
+            if (i + dx >= 0 && i + dx < 10){
+                if (j + dy >= 0 && j + dy < 10){
+                    graph.connect(point, maze[i + dx][j + dy]);
                 }
             }
         }
